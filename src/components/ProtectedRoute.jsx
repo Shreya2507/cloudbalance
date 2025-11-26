@@ -1,10 +1,23 @@
-import React from 'react'
-import { Navigate, Outlet } from 'react-router-dom';
+import React, { useContext, useEffect } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { AuthContext } from "../context/AuthContextProvider";
+import { useSelector } from "react-redux";
 
 const ProtectedRoute = () => {
-  const isAuthenticated = localStorage.getItem("authData");
-  
-  return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />
-}
+  //DIRECTLY FROM LOCALSTORAGE
+  // const isAuthenticated = localStorage.getItem("authData");
+  // return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />
 
-export default ProtectedRoute
+  //CONTEXT API
+  // const { currentUser } = useContext(AuthContext);
+
+  const currentUser = useSelector(state => state.currentUser);
+  useEffect(() => {
+    console.log(currentUser)
+  }, []);
+  
+
+  return currentUser ? <Outlet /> : <Navigate to="/" replace />;
+};
+
+export default ProtectedRoute;

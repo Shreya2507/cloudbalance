@@ -1,9 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import LoginFooter from './LoginFooter';
 import { dummyData } from './dummyData';
+import {AuthContext} from '../../context/AuthContextProvider'
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../../redux/authAction';
+
 
 const Login = () => {
+
+    //USING CONTEXT API
+    // const {setCurrentUser} = useContext(AuthContext);
+
+    //USING REDUX
+    const dispatch = useDispatch();
+    const currentUser = useSelector(state => state.currentUser);
+
     const navigate = useNavigate();
     const [authData, setAuthData] = useState({
         email: "",
@@ -50,19 +62,34 @@ const Login = () => {
     const authenticateUser = () => {
         console.log("Authenticating...");
         const user = dummyData.find(user => user.email === authData.email && user.password === authData.password)
-        return user ? true : false;
+        return user ? user : null;
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(authData);
+        console.log(authData.email);
         if (errors.email || errors.password || !authData.email || !authData.password) {
             setAuthError("Please fix errors before submitting.");
             return;
         }
 
         if(authenticateUser()){
-            localStorage.setItem("authData", JSON.stringify(authData));
+
+            //CONTEXT API
+            const user = authenticateUser();
+            const loggedInUser = {
+                name: user.name,
+                email: user.email
+            }
+            console.log(loggedInUser);
+
+            //CONTEXT API
+            // localStorage.setItem("authData", JSON.stringify(loggedInUser)); 
+            // setCurrentUser(loggedInUser);  
+            
+            //REDUX
+            dispatch(login(loggedInUser));
+
             console.log("User logged in");
             navigate("/dashboard");
             

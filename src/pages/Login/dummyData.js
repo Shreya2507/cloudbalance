@@ -1,10 +1,12 @@
 export const dummyData = [
     {
+        name: "Shreya Mathur",
         email: "shreya@gmail.com",
         password: "1234"
     },
     {
-        email: "shreya@gmail.com",
+        name: "John Doe",
+        email: "john@gmail.com",
         password: "1234"
     },
 ];

@@ -1,10 +1,22 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { GoPeople } from "react-icons/go";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { AuthContext } from '../context/AuthContextProvider';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../redux/authAction';
 
 const Header = ({isSidebarOpen, setIsSidebarOpen}) => {
+
+  //USING CONTEXT
+  // const {currentUser} = useContext(AuthContext);
+  // const {logout} = useContext(AuthContext);
+
+  //USING REDUX
+  const currentUser = useSelector(state => state.currentUser);
+  const dispatch = useDispatch();
+
   return (
     <div className='z-999 w-full p-7 py-3 h-16 bg-white flex justify-between items-center shadow-md shadow-[#a5a4a482]'>
       <div className=' h-full flex justify-between gap-8 items-center'>
@@ -23,12 +35,12 @@ const Header = ({isSidebarOpen, setIsSidebarOpen}) => {
             <div className='flex flex-col justify-center items-start'>
                 <div className='text-gray-500 text-sm leading-4 '>Welcome,</div>
                 <div className='flex justify-between items-center gap-1'>
-                    <div className=' text-blue-800 font-bold leading-2'>Shreya Mathur</div>
+                    <div className=' text-blue-800 font-bold leading-2'>{currentUser.name}</div>
                     <IoMdInformationCircleOutline className="text-blue-800 h-5 w-5"  />
                 </div>
             </div>
         </div>
-        <button className='flex cursor-pointer justify-center gap-3 items-center h-full w-28 px-1 py-2 rounded-md border-2 border-blue-800 font-bold text-blue-800'>
+        <button onClick={() => dispatch(logout())} className='flex cursor-pointer justify-center gap-3 items-center h-full w-28 px-1 py-2 rounded-md border-2 border-blue-800 font-bold text-blue-800'>
             <FiLogOut className='text-blue-800 w-5 h-5' />
             <div>Logout</div>
         </button>
