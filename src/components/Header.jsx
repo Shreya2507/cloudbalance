@@ -40,7 +40,7 @@ const Header = ({isSidebarOpen, setIsSidebarOpen}) => {
                 </div>
             </div>
         </div>
-        <button onClick={() => dispatch(logout())} className='flex cursor-pointer justify-center gap-3 items-center h-full w-28 px-1 py-2 rounded-md border-2 border-blue-800 font-bold text-blue-800'>
+        <button onClick={() => dispatch(logout())} className='flex cursor-pointer justify-center gap-3 items-center h-full w-28 px-1 py-2 rounded-md border-2 border-blue-800 font-bold text-blue-800 hover:bg-blue-50 hover:shadow-md hover:shadow-blue-100 transition-all duration-100'>
             <FiLogOut className='text-blue-800 w-5 h-5' />
             <div>Logout</div>
         </button>

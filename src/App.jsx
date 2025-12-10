@@ -9,6 +9,7 @@ import AwsServices from "./pages/Dashboard/AwsServices";
 import CreateUser from "./pages/Dashboard/UserManagement/CreateUser";
 import UsersTable from "./pages/Dashboard/UserManagement/UsersTable";
 import UserManagementLayout from "./pages/Dashboard/UserManagement/UserManagementLayout";
+import EditUser from "./pages/Dashboard/UserManagement/EditUser";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="user-management" element={<UserManagementLayout />}>
               <Route index element={<UsersTable />} />
               <Route path="create" element={<CreateUser />} />
+              <Route path="edit" element={<EditUser />} />
             </Route>
             <Route path="onboarding" element={<Onboarding />} />
             <Route path="cost-explorer" element={<CostExplorer />} />

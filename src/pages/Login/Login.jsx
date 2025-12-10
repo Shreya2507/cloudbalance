@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import LoginFooter from './LoginFooter';
 import { dummyData } from './dummyData';
@@ -15,8 +15,8 @@ const Login = () => {
     //USING REDUX
     const dispatch = useDispatch();
     const currentUser = useSelector(state => state.currentUser);
-
     const navigate = useNavigate();
+
     const [authData, setAuthData] = useState({
         email: "",
         password: ""
@@ -75,7 +75,6 @@ const Login = () => {
 
         if(authenticateUser()){
 
-            //CONTEXT API
             const user = authenticateUser();
             const loggedInUser = {
                 name: user.name,
@@ -91,12 +90,20 @@ const Login = () => {
             dispatch(login(loggedInUser));
 
             console.log("User logged in");
-            navigate("/dashboard");
+            navigate("/dashboard", {replace: true});
             
         }else{
             setAuthError("Invalid username or password");
         }
     }
+
+    useEffect(() => {
+        if(currentUser){
+            console.log("User logged in");
+            navigate("/dashboard", {replace: true});
+        }
+    }, []);
+    
 
   return (
     <div className=' w-screen h-screen flex justify-center items-center'>
@@ -104,12 +111,12 @@ const Login = () => {
             <img className='w-[50%] mb-9' src="/logo.svg" alt="logo" />
             <div className='w-full mb-2 flex flex-col justify-center items-start'>
                 <label className='mb-3 text-gray-800' htmlFor="email">Email</label>
-                <input value={authData.email} onChange={(e) => handleChange(e)} className='w-full border border-gray-600 rounded-md text-black py-3 px-4 font-bold placeholder:text-gray-500 ' type='email' name="email" id="email" placeholder='Enter email' />
+                <input value={authData.email} onChange={handleChange} className='w-full border border-gray-600 rounded-md text-black py-3 px-4 font-bold placeholder:text-gray-500 ' type='email' name="email" id="email" placeholder='Enter email' />
             </div>
             <div className='text-red-600 text-sm mb-8 w-full text-left'>{errors.email}</div>
             <div className='w-full mb-2 flex flex-col justify-center items-start'>
                 <label className='mb-3 text-gray-800' htmlFor="password">Password</label>
-                <input value={authData.password} onChange={(e) => handleChange(e)} className='w-full border border-gray-600 rounded-md text-black py-3 px-4 font-bold placeholder:text-gray-500 ' type="password" name="password" id="password" placeholder='Enter password' />
+                <input value={authData.password} onChange={handleChange} className='w-full border border-gray-600 rounded-md text-black py-3 px-4 font-bold placeholder:text-gray-500 ' type="password" name="password" id="password" placeholder='Enter password' />
             </div>
             <div className='text-red-600 text-sm mb-5 w-full text-left'>{errors.password}</div>
             

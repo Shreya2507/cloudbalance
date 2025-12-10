@@ -1,19 +1,29 @@
-import React, { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
-const CreateUser = () => {
-  const navigate = useNavigate();
-
+const EditUser = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  // const preFilledData = location.state === null ? {} : location.state;
 
-  const [userData, setUserData] = useState({
+  const preFilledData = location.state ?? {
     firstName: "",
     lastName: "",
     email: "",
     role: "",
-  });
+  };
+
+  // const [userData, setUserData] = useState({
+  //   firstName: "",
+  //   lastName: "",
+  //   email: "",
+  //   role: "",
+  // });
+
+  const [userData, setUserData] = useState(preFilledData);
 
   const [errors, setErrors] = useState({
     firstName: "",
@@ -74,18 +84,17 @@ const CreateUser = () => {
 
     try {
       setIsLoading(true);
-      const data = await axios.post(
-        "http://localhost:8080/api/users",
-        userData
+      const data = await axios.put(
+        `http://localhost:8080/api/users/${location.state.userId}`, {...userData}
         // "https://692423053ad095fb8472db99.mockapi.io/users"
       );
       console.log(data.data);
       console.log(data.status);
       // setUsersData(data.data);
       setIsLoading(false);
-      toast.success("User Created", {
+      toast.success("User Updated", {
         position: "bottom-center",
-        autoClose: 1400,
+        autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: true,
@@ -93,10 +102,6 @@ const CreateUser = () => {
         progress: undefined,
         theme: "colored",
       });
-
-      setTimeout(() => {
-        navigate("/dashboard/user-management");        
-      }, 1500);
       
     } catch (error) {
       console.log(error);
@@ -109,6 +114,22 @@ const CreateUser = () => {
     console.log(userData);
   };
 
+  // const handleSubmit = (e) => {
+  //   console.log("Submitted");
+  //   e.preventDefault();
+  //   toast.success("User Created", {
+  //     position: "bottom-center",
+  //     autoClose: 5000,
+  //     hideProgressBar: false,
+  //     closeOnClick: false,
+  //     pauseOnHover: true,
+  //     draggable: true,
+  //     progress: undefined,
+  //     theme: "colored",
+  //   });
+  //   console.log(userData);
+  // };
+
   const handleReset = () => {
     setUserData({
       firstName: "",
@@ -120,11 +141,12 @@ const CreateUser = () => {
     navigate("/dashboard/user-management");
   };
 
+
   return (
     <>
-      <div className=" text-2xl font-bold text-gray-800 mb-7">Add New User</div>
+      <div className=" text-2xl font-bold text-gray-800 mb-7">Edit User</div>
       <div className="bg-white rounded-lg p-5">
-        <form onSubmit={(e) => handleSubmit(e)} className=" w-full">
+        <form onSubmit={handleSubmit} className=" w-full">
           <div className="grid w-[50%] grid-cols-2 grid-rows-2 gap-5 mb-8">
             <div className="flex flex-col">
               <label htmlFor="firstName">
@@ -135,7 +157,7 @@ const CreateUser = () => {
                 className="w-full py-3 px-4 border border-gray-300 rounded-sm"
                 name="firstName"
                 value={userData.firstName}
-                onChange={(e) => handleChange(e)}
+                onChange={handleChange}
                 placeholder="Enter First Name"
                 id="firstName"
                 type="text"
@@ -154,7 +176,7 @@ const CreateUser = () => {
                 className="w-full py-3 px-4 border border-gray-300 rounded-sm"
                 name="lastName"
                 value={userData.lastName}
-                onChange={(e) => handleChange(e)}
+                onChange={handleChange}
                 placeholder="Enter Last Name"
                 id="lastName"
                 type="text"
@@ -171,7 +193,7 @@ const CreateUser = () => {
                 className="w-full py-3 px-4 border border-gray-300 rounded-sm"
                 name="email"
                 value={userData.email}
-                onChange={(e) => handleChange(e)}
+                onChange={handleChange}
                 placeholder="Enter Email ID"
                 id="email"
                 type="email"
@@ -184,7 +206,7 @@ const CreateUser = () => {
                 className="w-full py-3.5 px-4 border disabled:bg-gray-800 border-gray-300 rounded-sm bg-white"
                 name="role"
                 value={userData.role}
-                onChange={(e) => handleChange(e)}
+                onChange={handleChange}
                 id="role"
               >
                 <option value="" disabled>
@@ -220,4 +242,4 @@ const CreateUser = () => {
   );
 };
 
-export default CreateUser;
+export default EditUser;

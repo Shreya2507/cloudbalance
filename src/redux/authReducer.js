@@ -3,7 +3,9 @@ const user = storedUser ? JSON.parse(storedUser) : null;
 
 
 const initialState = {
-    currentUser: user
+    currentUser: user,
+    
+
 }
 
 const authReducer = (state = initialState, action) => {
